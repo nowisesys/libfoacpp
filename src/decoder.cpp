@@ -1,4 +1,4 @@
-// Library implementing FOA - Fast Object and Array encoding.
+// C++ library implementation of FOA - Fast Object and Array encoding.
 // Copyright (C) 2009 Anders Lövgren
 // 
 // This program is free software: you can redistribute it and/or modify
@@ -281,6 +281,5 @@ namespace foa {
 		}
 		return false;
 	}
-
 	
-}
+}       // namespace foa
