@@ -26,6 +26,34 @@ extern "C++" {
 #include <ostream>
 #include <sstream>
 
+#if defined(WIN32) || defined(_WINDOWS) || defined(__CYGWIN__)
+	/* Define LIBFOAPP_EXPORTS when building library on windows. */
+# if defined(LIBFOAPP_EXPORTS)
+#  if defined(__GNUC__)
+#   define FOA_API_PUBLIC __attribute__((dllexport))
+#  else
+	/* Note: actually gcc seems to also supports this syntax. */
+#   define FOA_API_PUBLIC __declspec(dllexport)
+#  endif
+# else
+#  if defined(__GNUC__)
+#   define FOA_API_PUBLIC __attribute__((dllimport))
+#  else
+	/* Note: actually gcc seems to also supports this syntax. */
+#   define FOA_API_PUBLIC __declspec(dllimport) 
+#  endif
+# endif
+# define FOA_API_HIDDEN
+#else
+# if __GNUC__ >= 4
+#  define FOA_API_PUBLIC __attribute__ ((visibility("default")))
+#  define FOA_API_HIDDEN __attribute__ ((visibility("hidden")))
+# else
+#  define FOA_API_PUBLIC
+#  define FOA_API_HIDDEN
+# endif
+#endif
+
 namespace foa {
 	
 	static const int   foavers = 0x010000;  // The library version.
@@ -62,13 +90,13 @@ namespace foa {
 		std::string name;
 		std::string data;
 		ttype type;
-		int line;		
+		size_t line;		
 	};
 	
 	// 
 	// Memory allocation strategy:
 	// 
-	class memory_strategy 
+	class FOA_API_PUBLIC memory_strategy 
 	{
 	public:
 		static const int INIT_SIZE = 128;  // Default initial size.
@@ -76,28 +104,28 @@ namespace foa {
 		static const int MAX_SIZE  = 8 * 1024 * 1024; // Maximum buffer size.
 		static const int UNLIMITED = 0;    // Use unlimited buffer size.
 	private:
-		int init;    // Initial buffer size.
-		int step;    // Realloc buffer step size.
-		int max;     // Maximum buffer size.
+		size_t init;    // Initial buffer size.
+		size_t step;    // Realloc buffer step size.
+		size_t max;     // Maximum buffer size.
 	public:
 		memory_strategy();
-		memory_strategy(int init, int step, int max);
-		memory_strategy(int init, int step);
+		memory_strategy(size_t init, size_t step, size_t max);
+		memory_strategy(size_t init, size_t step);
 				
-		void init_size(int val) { init = val; }
-		void step_size(int val) { step = val; }
-		void max_size(int val) { max = val; }
+		void init_size(size_t val) { init = val; }
+		void step_size(size_t val) { step = val; }
+		void max_size(size_t val) { max = val; }
 		void unlimited() { max = UNLIMITED; }
 		
-		int init_size() const { return init; }
-		int step_size() const { return step; }
-		int max_size() const { return max; }
+		size_t init_size() const { return init; }
+		size_t step_size() const { return step; }
+		size_t max_size() const { return max; }
 	};
 	
 	// 
 	// The FOA encoder:
 	// 
-	class encoder 
+	class FOA_API_PUBLIC encoder 
 	{
 	private:
 		std::ostream *out;   // Destination stream.
@@ -127,12 +155,12 @@ namespace foa {
 		template <typename T> inline std::string convert(T &);
 	};
 
-	struct parse_data;  // Forward declare.
+	struct FOA_API_HIDDEN parse_data;  // Forward declare.
 
 	// 
 	// The FOA decoder:
 	// 
-	class decoder
+	class FOA_API_PUBLIC decoder
 	{
 	private:
 		std::istream *in;         // Source stream.		
@@ -142,7 +170,7 @@ namespace foa {
 		bool escape;              // Enable/disable escape.
 	public:
 		decoder();
-		decoder(const char *buff, int len);  // Decode external buffer.
+		decoder(const char *buff, size_t len);  // Decode external buffer.
 		decoder(const std::string &);        // Decode string.
 		decoder(std::istream &in);           // Decode stream.
 		decoder(std::istream &in, const memory_strategy *strategy);
@@ -152,7 +180,7 @@ namespace foa {
 		std::istream & stream() const { return *in; }
 		void strategy(const memory_strategy *strategy);
 		const memory_strategy * strategy() { return strat; }
-		void buffer(const char *buff, int size);
+		void buffer(const char *buff, size_t size);
 		
 		void option(encopt opt, bool enable);
 		bool option(encopt opt) const;  // Throws std::invalid_argument
