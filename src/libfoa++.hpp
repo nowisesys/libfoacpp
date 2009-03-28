@@ -56,7 +56,7 @@ extern "C++" {
 
 namespace foa {
 	
-	static const int   foavers = 0x010000;  // The library version.
+	static const int   foavers = 0x010001;  // The library version.
 	static const float foaspec = 1.0f;      // The FOA specification.
 	
 	// 

@@ -2,8 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.63])
-AC_INIT([libfoa++], [1.0.0], [lespaul@algonet.se])
-AM_INIT_AUTOMAKE([libfoa++], [1.0.0])
+AC_INIT([libfoa++], [1.0.1], [lespaul@algonet.se])
+AM_INIT_AUTOMAKE([libfoa++], [1.0.1])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
