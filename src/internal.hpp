@@ -20,7 +20,7 @@
 
 namespace foa {
 	
-	struct parse_data
+	struct FOA_API_HIDDEN parse_data
 	{
 		char *buffer;    // Scan buffer
 		size_t size;        // Scan buffer size
@@ -38,7 +38,7 @@ namespace foa {
 		void move_data();
 	};
 
-	class escape 
+	class FOA_API_HIDDEN escape 
 	{
 	private:
 		static std::string & replace(std::string &str, const char *find, const char *replace);
