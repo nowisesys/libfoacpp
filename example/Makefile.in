@@ -209,6 +209,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 LIBFOA = $(top_srcdir)/src/.libs/libfoa++.a
+# LIBFOA = $(top_srcdir)/src/libfoa++.la
 INCLUDES = -I$(top_srcdir)/src
 AM_LDFLAGS = $(LIBFOA)
 encode_escape_SOURCES = encode_escape.cpp
