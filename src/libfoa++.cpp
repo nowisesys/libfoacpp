@@ -61,7 +61,7 @@ namespace foa {
 	// 
 	// Resize the buffer.
 	// 
-	void parse_data::resize(int size)
+	void parse_data::resize(size_t size)
 	{
 		char *buffer = new char[size + 1];
 		memcpy(buffer, this->buffer, this->size);
@@ -76,7 +76,7 @@ namespace foa {
 	// 
 	void parse_data::move_data()
 	{
-		int length = ppos - end;
+		size_t length = ppos - end;
 		memmove(buffer + end, buffer, length);
 		ppos = length; start = end = 0;
 	}
@@ -95,7 +95,7 @@ namespace foa {
 	// 
 	// Creates the object using the requsted sizes.
 	// 
-	memory_strategy::memory_strategy(int init, int step, int max)
+	memory_strategy::memory_strategy(size_t init, size_t step, size_t max)
 	{
 		this->init = init;
 		this->step = step;
@@ -106,7 +106,7 @@ namespace foa {
 	// Creates the object using default sizes for initial buffer size 
 	// and reallocation chunk size, but with no maximum buffer size.
 	// 
-	memory_strategy::memory_strategy(int init, int step)
+	memory_strategy::memory_strategy(size_t init, size_t step)
 	{
 		this->init = init;
 		this->step = step;

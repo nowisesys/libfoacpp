@@ -43,7 +43,7 @@ namespace foa {
 	// 
 	// Create decoder of external buffer.
 	// 
-	decoder::decoder(const char *buff, int len)
+	decoder::decoder(const char *buff, size_t len)
 		: in(0), strat(0), escape(true)
 	{
 		data = new parse_data;
@@ -123,7 +123,7 @@ namespace foa {
 	// 
 	// Sets an external buffer to parse.
 	// 
-	void decoder::buffer(const char *buff, int size)
+	void decoder::buffer(const char *buff, size_t size)
 	{
 		data->reset(true);
 		data->buffer = const_cast<char *>(buff);  // use buffer as read-only
@@ -260,7 +260,7 @@ namespace foa {
 			data->size = strat->init_size();
 		}
 		while(true) {
-			int want = data->size - data->ppos;
+			std::streamsize want = static_cast<std::streamsize>(data->size - data->ppos);
 			
 			in->read(&data->buffer[data->ppos], want);
 			if(in->gcount() == 0) {
@@ -271,7 +271,7 @@ namespace foa {
 				return true;
 			}
 			if(in->gcount() == want) {
-				int size = data->size + strat->step_size();
+				size_t size = data->size + strat->step_size();
 				if(strat->max_size() < size && 
 				   strat->max_size() != memory_strategy::UNLIMITED) {
 					throw std::overflow_error("Maximum buffer size exceeded.");

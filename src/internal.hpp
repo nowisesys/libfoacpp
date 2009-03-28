@@ -23,18 +23,18 @@ namespace foa {
 	struct parse_data
 	{
 		char *buffer;    // Scan buffer
-		int size;        // Scan buffer size
-		int start;       // Scan start position
-		int end;         // Scan end position
-		int ppos;        // Current put position
-		int line;        // Current line
+		size_t size;        // Scan buffer size
+		size_t start;       // Scan start position
+		size_t end;         // Scan end position
+		size_t ppos;        // Current put position
+		size_t line;        // Current line
 		bool external;   // Buffer is external
 		
 		parse_data();
 		~parse_data();
 		
 		void reset(bool external);
-		void resize(int size);
+		void resize(size_t size);
 		void move_data();
 	};
 
