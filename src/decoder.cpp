@@ -105,6 +105,15 @@ namespace foa {
 	// 
 	void decoder::strategy(const memory_strategy *strategy)
 	{
+		if(!strategy) {
+			if(in) {
+				throw std::invalid_argument("Can't clear memory strategy when input stream is set.");
+			}
+			delete strat;
+			strat = 0;
+			return;
+		}
+		
 		if(strat->max_size() != memory_strategy::UNLIMITED && 
 		   strat->max_size() != this->strat->max_size() && 
 		   strat->max_size() < data->size) {

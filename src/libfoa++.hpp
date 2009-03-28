@@ -178,7 +178,7 @@ namespace foa {
 		
 		void stream(std::istream *in);
 		std::istream & stream() const { return *in; }
-		void strategy(const memory_strategy *strategy);
+		void strategy(const memory_strategy *strategy); // Throws std::invalid_argument
 		const memory_strategy * strategy() { return strat; }
 		void buffer(const char *buff, size_t size);
 		
