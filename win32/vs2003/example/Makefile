@@ -4,18 +4,26 @@
 # Date:   2009-03-28
 
 TARGET  = release
+LIBNAME = libfoa++
 
 SRCLIB  = ..\..\..\src
 SRCDIR  = ..\..\..\example
 DESTDIR = .
 
-VC7OPTS   = /O2 /G5 /EHsc /TP
-DEFINES   = /DWIN32 /DHAVE_CONFIG_H /DLIBFOAPP_IMPORTS /D_WIN32_WINNT=0x400 /DSTDCALL=_stdcall
+# Make sure to link with multi-threaded DLL (/MD). These options have to 
+# match thoose in project libfoa++ (or nasty things will happen).
+# 
+# Debug version:
+# VC7OPTS   = /O1 /G5 /EHsc /TP /MDd /GR
+# Release version:
+VC7OPTS   = /O2 /G5 /EHsc /TP /MD /GR
+
+DEFINES   = /DWIN32 /DHAVE_CONFIG_H /DLIBFOAPP_IMPORTS /D_WIN32_WINNT=0x400 /DSTDCALL=_thiscall
 INCLUDES  = /I$(SRCDIR) /I$(SRCLIB) /I. /I..
 CXXFLAGS  = $(VC7OPTS) $(DEFINES) $(INCLUDES)
 LDFLAGS   = /link $(IMPORTLIB)
 
-IMPORTLIB = ..\libfoa++\$(TARGET)\libfoa++.lib
+IMPORTLIB = ..\$(LIBNAME)\$(TARGET)\$(LIBNAME).lib
 
 EXAMPLES  = encode_escape.exe encode_file_stream1.exe encode_file_stream2.exe \
 	encode_object_array.exe encode_stdout_stream.exe encode_string_stream.exe \
