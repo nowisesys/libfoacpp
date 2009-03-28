@@ -1,0 +1,134 @@
+.TH "LIBFOA++" "3" "2009-03-28" "QNET" ""
+\" This manual page is under GNU general public license (GPL).
+\" Copyright (C) 2009 Anders Lövgren
+.SH NAME
+C\+\+ library implementing FOA - Fast Object and Array encoding/decoding
+
+.SH SYNOPSIS
+\fB#include <libfoa\+\+.hpp>\fR
+
+.SH DESCRIPTION
+.PP
+This C\+\+ library implements version 1.0 of the FOA specification. The spec 
+can be found here: http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
+.PP
+FOA is designed to be used as an alternative to XML for web services, as an 
+building block for object oriented network protocols or as an generic object 
+serializing method (i.e. write objects in C\+\+ and read them back in Java).
+.PP
+The memory footprint of the library is small because it will never use more 
+memory than required to hold the longest single line of data to decode.
+
+.SH TYPES
+This section briefly describes the FOA encoding. Each encoded line contains
+either data (could be an array entry or an object member) or an special char. Each 
+special char or data item must be followed by a newline (\\n) character. The 
+special chars are 
+.B '(' 
+(begin object),
+.B '[' 
+(begin array),
+.B ']' 
+(end array) and
+.B ')' 
+(end object).
+.PP
+Each data, array or object (type) can also be named by 'name = type'. Arrays and 
+objects can be unlimited nested in each other.
+.PP
+.B Syntax:
+.PP
+.br 
+item := (name '=' data | data) + '\\n'
+.br 
+data := text | spec
+.br 
+name := text - '='
+.br 
+text := any char
+.br 
+spec := ([])
+.br 
+.PP
+.B Example:
+.PP
+This is an example of how an array (named arr) containing two structures
+(persons with named members) will be encoded:
+.PP
+arr = [
+.br
+(
+.br
+name = Albert Einstein
+.br
+born = March 14, 1879
+.br
+)
+.br
+(
+.br
+name = Isaac Newton
+.br
+born = December 25, 1642
+.br
+)
+.br
+]
+.PP
+.B Escape:
+.PP
+If escaping is turned on (the default), then special chars will be escaped when encoding
+and unescaped when decoding (they are mapped to HTTP encoded equivalents).
+This is all transparent to the library user. The escaping can be turned off
+thru the \fBoption()\fR memeber function to improve performance.
+
+.SH EXAMPLE
+This simple example shows how to write an array of objects to std::cout. In
+real world code, the output stream would be either an string stream (doing 
+output buffering), an file stream or an tcp socket stream wrapper.
+.RS
+.nf
+
+#include <iostream>
+#include <libfoa++.hpp>
+
+struct person
+{
+	const char *name;
+	int age;
+};
+
+int main()
+{
+	person persons[] = {
+		{ "adam", 35 },
+		{ "bertil", 41 },
+		{ "ceasar", 71 },
+		{ 0, 0 }
+	};
+	
+	foa::encoder enc(std::cout);
+	
+	enc.write(foa::start_array);
+	for(person *pp = persons; pp->name; ++pp) {
+		enc.write(foa::start_object);
+		enc.write("name", pp->name);
+		enc.write("age", pp->age);
+		enc.write(foa::end_object);
+	}
+	enc.write(foa::end_array);
+	
+	return 0;
+}
+.RE
+.fi
+
+.SH NOTES
+Full length examples of encoding/decoding and more documentation of the FOA
+format is bundled with the source code.
+
+.SH BUGS
+Probably, send an bug report to lespaul@algonet.se if you find one.
+
+.SH AUTHOR
+Anders Lövgren

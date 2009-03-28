@@ -1,0 +1,6 @@
+This directory contains C++ examples on using the libfoa++ library. 
+
+Remember to run './automake.sh > Makefile.def' after adding examples 
+to update the list of examples to build.
+
+// Anders, 2009-03-27

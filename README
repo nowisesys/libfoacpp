@@ -1,0 +1,22 @@
+This is a C++ library implementing the FOA encoding/decoding method. 
+
+** ABOUT:
+
+   FOA stands for Fast Object and Array encoding/decoding and is an method 
+   for efficient data exchange between applications and/or hosts. It can be
+   used as an alternative to XML for web services, as an building block for
+   object oriented network protocols or as an generic object serializing 
+   method (i.e. write objects in C++ and read them back in Java).
+
+** SPECIFICATION:
+
+   This library implements version 1.0 of the FOA specification. The spec 
+   can be found here: http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
+
+** LICENSE:
+
+   The library (libfoa++) is released under the GNU Library or Lesser General 
+   Public License, so you are allowed to use it in commercial applications or 
+   libraries that links to the library.
+   
+// Anders Lövgren, 2009-03-24
