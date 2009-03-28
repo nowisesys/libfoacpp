@@ -99,10 +99,10 @@ namespace foa {
 	class FOA_API_PUBLIC memory_strategy 
 	{
 	public:
-		static const int INIT_SIZE = 128;  // Default initial size.
-		static const int STEP_SIZE = 256;  // Default step size.
-		static const int MAX_SIZE  = 8 * 1024 * 1024; // Maximum buffer size.
-		static const int UNLIMITED = 0;    // Use unlimited buffer size.
+		static const size_t INIT_SIZE = 128;  // Default initial size.
+		static const size_t STEP_SIZE = 256;  // Default step size.
+		static const size_t MAX_SIZE  = 8 * 1024 * 1024; // Maximum buffer size.
+		static const size_t UNLIMITED = 0;    // Use unlimited buffer size.
 	private:
 		size_t init;    // Initial buffer size.
 		size_t step;    // Realloc buffer step size.
