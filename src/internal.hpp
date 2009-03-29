@@ -23,19 +23,22 @@ namespace foa {
 	struct FOA_API_HIDDEN parse_data
 	{
 		char *buffer;    // Scan buffer
-		size_t size;        // Scan buffer size
-		size_t start;       // Scan start position
-		size_t end;         // Scan end position
-		size_t ppos;        // Current put position
-		size_t line;        // Current line
+		size_t size;     // Scan buffer size
+		size_t start;    // Scan start position
+		size_t end;      // Scan end position
+		size_t ppos;     // Current put position
+		size_t line;     // Current line
 		bool external;   // Buffer is external
+		int ref;         // Reference count for buffer
 		
-		parse_data();
+		explicit parse_data();
 		~parse_data();
+
+		void operator=(parse_data &data);
 		
 		void reset(bool external);
 		void resize(size_t size);
-		void move_data();
+		void move_data();		
 	};
 
 	class FOA_API_HIDDEN escape 

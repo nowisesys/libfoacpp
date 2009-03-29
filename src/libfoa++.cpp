@@ -34,15 +34,28 @@ namespace foa {
 	// Construct the parse data object.
 	// 
 	parse_data::parse_data() 
-		: buffer(0), size(0), start(0), end(0), ppos(0), line(0), external(false)
+		: buffer(0), size(0), start(0), end(0), ppos(0), line(0), external(false), ref(0)
 	{
 	}
 
+	// 
+	// Delete the buffer only when buffer reference count drops below 0.
+	// 
 	parse_data::~parse_data()
 	{
-		if(!external) {
+		if(!external && ref < 0) {
 			delete [] buffer;
 		}
+	}
+
+	// 
+	// Increment buffer reference count on this object when assigned from
+	// another object.
+	// 
+	void parse_data::operator=(parse_data &data) 
+	{
+		ref++;
+		data.ref--;
 	}
 	
 	// 

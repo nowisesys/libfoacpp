@@ -274,6 +274,10 @@ namespace foa {
 		if(!data->buffer) {
 			return false;
 		}
+		// 
+		// Calls the (compiler supplied) copy constructor and not, as
+		// one would suspect, the operator=() in the parse_data class.
+		// 
 		parse_data curr = *data;
 		while(data->end < data->ppos && data->buffer[data->end] == '\n') {
 			++data->end;
@@ -291,7 +295,7 @@ namespace foa {
 			return false;
 		}
 		
-		++data->line;
+		++data->line;		
 		return true;
 	}
 	
