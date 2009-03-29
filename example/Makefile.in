@@ -34,11 +34,12 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.def \
 	$(srcdir)/Makefile.in
-noinst_PROGRAMS = encode_escape$(EXEEXT) encode_file_stream1$(EXEEXT) \
-	encode_file_stream2$(EXEEXT) encode_object_array$(EXEEXT) \
-	encode_stdout_stream$(EXEEXT) encode_string_stream$(EXEEXT) \
-	encode_write$(EXEEXT) set_memory_strategy$(EXEEXT) \
-	set_option$(EXEEXT) template$(EXEEXT)
+noinst_PROGRAMS = decode_memory_buffer$(EXEEXT) encode_escape$(EXEEXT) \
+	encode_file_stream1$(EXEEXT) encode_file_stream2$(EXEEXT) \
+	encode_object_array$(EXEEXT) encode_stdout_stream$(EXEEXT) \
+	encode_string_stream$(EXEEXT) encode_write$(EXEEXT) \
+	set_memory_strategy$(EXEEXT) set_option$(EXEEXT) \
+	template$(EXEEXT)
 subdir = example
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -48,6 +49,9 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
+am_decode_memory_buffer_OBJECTS = decode_memory_buffer.$(OBJEXT)
+decode_memory_buffer_OBJECTS = $(am_decode_memory_buffer_OBJECTS)
+decode_memory_buffer_LDADD = $(LDADD)
 am_encode_escape_OBJECTS = encode_escape.$(OBJEXT)
 encode_escape_OBJECTS = $(am_encode_escape_OBJECTS)
 encode_escape_LDADD = $(LDADD)
@@ -90,13 +94,14 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(encode_escape_SOURCES) $(encode_file_stream1_SOURCES) \
-	$(encode_file_stream2_SOURCES) $(encode_object_array_SOURCES) \
-	$(encode_stdout_stream_SOURCES) \
+SOURCES = $(decode_memory_buffer_SOURCES) $(encode_escape_SOURCES) \
+	$(encode_file_stream1_SOURCES) $(encode_file_stream2_SOURCES) \
+	$(encode_object_array_SOURCES) $(encode_stdout_stream_SOURCES) \
 	$(encode_string_stream_SOURCES) $(encode_write_SOURCES) \
 	$(set_memory_strategy_SOURCES) $(set_option_SOURCES) \
 	$(template_SOURCES)
-DIST_SOURCES = $(encode_escape_SOURCES) $(encode_file_stream1_SOURCES) \
+DIST_SOURCES = $(decode_memory_buffer_SOURCES) \
+	$(encode_escape_SOURCES) $(encode_file_stream1_SOURCES) \
 	$(encode_file_stream2_SOURCES) $(encode_object_array_SOURCES) \
 	$(encode_stdout_stream_SOURCES) \
 	$(encode_string_stream_SOURCES) $(encode_write_SOURCES) \
@@ -218,6 +223,7 @@ LIBFOA = $(top_srcdir)/src/.libs/libfoa++.a
 # LIBFOA = $(top_srcdir)/src/libfoa++.la
 INCLUDES = -I$(top_srcdir)/src
 AM_LDFLAGS = $(LIBFOA)
+decode_memory_buffer_SOURCES = decode_memory_buffer.cpp
 encode_escape_SOURCES = encode_escape.cpp
 encode_file_stream1_SOURCES = encode_file_stream1.cpp
 encode_file_stream2_SOURCES = encode_file_stream2.cpp
@@ -268,6 +274,9 @@ clean-noinstPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+decode_memory_buffer$(EXEEXT): $(decode_memory_buffer_OBJECTS) $(decode_memory_buffer_DEPENDENCIES) 
+	@rm -f decode_memory_buffer$(EXEEXT)
+	$(CXXLINK) $(decode_memory_buffer_OBJECTS) $(decode_memory_buffer_LDADD) $(LIBS)
 encode_escape$(EXEEXT): $(encode_escape_OBJECTS) $(encode_escape_DEPENDENCIES) 
 	@rm -f encode_escape$(EXEEXT)
 	$(CXXLINK) $(encode_escape_OBJECTS) $(encode_escape_LDADD) $(LIBS)
@@ -305,6 +314,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_memory_buffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode_escape.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode_file_stream1.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode_file_stream2.Po@am__quote@
@@ -518,7 +528,7 @@ uninstall-am:
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
-encode_escape encode_file_stream1 encode_file_stream2 encode_object_array encode_stdout_stream encode_string_stream encode_write set_memory_strategy set_option template  : $(LIBFOA)
+decode_memory_buffer encode_escape encode_file_stream1 encode_file_stream2 encode_object_array encode_stdout_stream encode_string_stream encode_write set_memory_strategy set_option template  : $(LIBFOA)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
