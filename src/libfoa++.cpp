@@ -55,7 +55,7 @@ namespace foa {
 			buffer = 0;
 		}
 		this->external = external;
-		line = start = end = ppos;
+		line = start = end = ppos = 0;
 	}
 	
 	// 
