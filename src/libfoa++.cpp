@@ -64,7 +64,10 @@ namespace foa {
 	void parse_data::resize(size_t size)
 	{
 		char *buffer = new char[size + 1];
-		memcpy(buffer, this->buffer, this->size);
+		if(this->buffer) {
+			memcpy(buffer, this->buffer, this->size);
+			delete [] this->buffer;
+		}
 		this->size = size;
 		this->buffer = buffer;
 	}
