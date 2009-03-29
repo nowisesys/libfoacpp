@@ -1,6 +1,9 @@
-Version 1.0.1 (2009-mm-dd):
+Version 1.0.2 (2009-mm-dd):
 
-	* Build libfoa++ with Visual Studio 2003 fixed.
+
+Version 1.0.1 (2009-03-29):
+
+	* Support for building libfoa++ with Visual Studio 2003 added.
 
 Version 1.0.0 (2009-03-28):
 
