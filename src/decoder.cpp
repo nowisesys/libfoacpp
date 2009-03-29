@@ -69,7 +69,7 @@ namespace foa {
 	{
 		data = new parse_data;
 		this->in = &in;
-		this->strat = &default_strategy;
+		this->strat = new memory_strategy(default_strategy);
 	}
 	
 	// 
