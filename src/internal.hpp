@@ -18,6 +18,10 @@
 #ifndef __INTERNAL_HPP__
 #define __INTERNAL_HPP__
 
+#ifndef HAVE_ISBLANK
+extern int isblank(int c);
+#endif
+
 namespace foa {
 	
 	struct FOA_API_HIDDEN parse_data

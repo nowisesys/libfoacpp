@@ -7,6 +7,9 @@ AM_INIT_AUTOMAKE([libfoa++], [1.0.1])
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
+# We need _XOPEN_SOURCE=600 for isblank():
+CXXFLAGS="$CXXFLAGS -D_XOPEN_SOURCE=600"
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
@@ -27,7 +30,7 @@ AC_C_INLINE
 AC_TYPE_SIZE_T
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memmove])
+AC_CHECK_FUNCS([memmove isblank])
 
 # Check whether to build examples:
 AC_MSG_CHECKING([whether to build examples])

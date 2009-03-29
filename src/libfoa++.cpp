@@ -28,6 +28,13 @@
 #include "libfoa++.hpp"
 #include "internal.hpp"
 
+#ifndef HAVE_ISBLANK
+int isblank(int c)
+{
+	return c == ' ' || c == '\t';
+}
+#endif
+
 namespace foa {
 
 	// 
