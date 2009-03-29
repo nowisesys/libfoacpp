@@ -163,7 +163,8 @@ namespace foa {
 	class FOA_API_PUBLIC decoder
 	{
 	private:
-		std::istream *in;         // Source stream.		
+		std::istream *in;         // Source stream.
+		std::string str;          // Source string.
 		entity ent;               // Current entity.
 		parse_data *data;         // Parse helper.
 		memory_strategy *strat;   // Memory allocation strategy.
@@ -179,8 +180,10 @@ namespace foa {
 		void stream(std::istream *in);
 		std::istream & stream() const { return *in; }
 		void strategy(const memory_strategy *strategy); // Throws std::invalid_argument
-		const memory_strategy * strategy() { return strat; }
+		const memory_strategy * strategy() const { return strat; }
 		void buffer(const char *buff, size_t size);
+		void buffer(const std::string &str);
+		const char * buffer() const;
 		
 		void option(encopt opt, bool enable);
 		bool option(encopt opt) const;  // Throws std::invalid_argument

@@ -58,7 +58,7 @@ namespace foa {
 		: in(0), strat(0), escape(true)
 	{
 		data = new parse_data;
-		buffer(str.c_str(), str.size());
+		buffer(str);
 	}
 	
 	// 
@@ -138,6 +138,26 @@ namespace foa {
 		data->reset(true);
 		data->buffer = const_cast<char *>(buff);  // use buffer as read-only
 		data->ppos = data->size = size;
+	}
+	
+	// 
+	// Sets an external string to parse.
+	// 
+	void decoder::buffer(const std::string &str) 
+	{
+		this->str = str;
+		data->reset(true);
+		data->buffer = const_cast<char *>(this->str.c_str());  // use buffer as read-only
+		data->ppos = data->size = str.size();
+	}
+	
+	// 
+	// Get the current buffer. Note that returning the buffer when data 
+	// is internal don't make sense (it's not terminated by null).
+	// 
+	const char * decoder::buffer() const 
+	{
+		return data->external ? data->buffer : 0;
 	}
 	
 	// 
