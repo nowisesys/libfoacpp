@@ -32,7 +32,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.def \
+DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.dep \
 	$(srcdir)/Makefile.in
 noinst_PROGRAMS = decode_file_stream$(EXEEXT) \
 	decode_memory_buffer$(EXEEXT) decode_string_buffer$(EXEEXT) \
@@ -257,7 +257,7 @@ all: all-am
 
 .SUFFIXES:
 .SUFFIXES: .cpp .lo .o .obj
-$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/Makefile.def $(am__configure_deps)
+$(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(srcdir)/Makefile.dep $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
 	    *$$dep*) \
