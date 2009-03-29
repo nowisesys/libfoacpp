@@ -1,2 +1,0 @@
-Fix memory strategy in decoder. The decoder::strat member must be initilized
-in all code using a input stream.
