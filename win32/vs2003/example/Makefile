@@ -25,12 +25,18 @@ LDFLAGS   = /link $(IMPORTLIB)
 
 IMPORTLIB = ..\$(LIBNAME)\$(TARGET)\$(LIBNAME).lib
 
-EXAMPLES  = encode_escape.exe encode_file_stream1.exe encode_file_stream2.exe \
-	encode_object_array.exe encode_stdout_stream.exe encode_string_stream.exe \
-	encode_write.exe set_option.exe
+EXAMPLES  = decode_file_stream.exe decode_memory_buffer.exe decode_string_buffer.exe \
+			decode_string_dynamic.exe encode_escape.exe encode_file_stream1.exe \
+			encode_file_stream2.exe encode_object_array.exe encode_stdout_stream.exe \
+			encode_string_stream.exe encode_write.exe set_memory_strategy.exe \
+			set_option.exe
 
 all : $(EXAMPLES)
 
+decode_file_stream.exe : {$(SRCDIR)}decode_file_stream.cpp
+decode_memory_buffer.exe : {$(SRCDIR)}decode_memory_buffer.cpp
+decode_string_buffer.exe : {$(SRCDIR)}decode_string_buffer.cpp
+decode_string_dynamic.exe : {$(SRCDIR)}decode_string_dynamic.cpp
 encode_escape.exe : {$(SRCDIR)}encode_escape.cpp
 encode_file_stream1.exe : {$(SRCDIR)}encode_file_stream1.cpp
 encode_file_stream2.exe : {$(SRCDIR)}encode_file_stream2.cpp
@@ -38,6 +44,7 @@ encode_object_array.exe : {$(SRCDIR)}encode_object_array.cpp
 encode_stdout_stream.exe : {$(SRCDIR)}encode_stdout_stream.cpp
 encode_string_stream.exe : {$(SRCDIR)}encode_string_stream.cpp
 encode_write.exe : {$(SRCDIR)}encode_write.cpp
+set_memory_strategy.exe : {$(SRCDIR)}set_memory_strategy.cpp
 set_option.exe : {$(SRCDIR)}set_option.cpp
 
 # Rule for building source files (we can't use builtin):
