@@ -24,6 +24,7 @@
 #endif
 
 #include <stdexcept>
+#include <cctype>
 
 #include "libfoa++.hpp"
 #include "internal.hpp"
@@ -189,22 +190,38 @@ namespace foa {
 	}
 	
 	// 
+	// Simple utility function for trimming an STL string.
+	// 
+	std::string FOA_API_HIDDEN trim(std::string str) 
+	{
+		std::string::size_type ts = 0;
+		std::string::size_type te = str.size();
+		
+		while(isblank(str[ts]) || iscntrl(str[ts])) ++ts;
+		while(isblank(str[te]) || iscntrl(str[te])) --te;
+		
+		return std::string(str, ts, te - ts + 1);
+	}
+	
+	// 
 	// Decode next entity.
 	// 
 	void decoder::decode() 
 	{
 		ent.line = data->line;
 		
-		std::string str = std::string(&data->buffer[data->start], data->end - data->start);
-		size_t pos = str.find_first_of('=');
+		std::string str = std::string(&data->buffer[data->start], data->end - data->start);		
+		std::string::size_type pos = str.find_first_of('=');
+		
 		if(pos != std::string::npos) {
-			ent.name = str.substr(0, pos);
-			ent.data = str.substr(pos + 1, 0);
+			ent.name = trim(str.substr(0, pos));
+			ent.data = trim(str.substr(pos + 1));
 		} else {
 			ent.name = "";
-			ent.data = str;
+			ent.data = trim(str);
 		}
-		if(ent.data.size() == 1) {
+		
+		if(ent.data.length() == 1) {
 			switch(ent.data[0]) {
 			case start_object:
 				ent.type = entity::start_object;
@@ -242,7 +259,7 @@ namespace foa {
 			++data->end;
 		}
 		if(data->end >= data->ppos) {
-			*data = curr;
+			*data = curr;       // Rollback
 			return false;
 		}
 		data->start = data->end;
@@ -250,7 +267,7 @@ namespace foa {
 			++data->end;
 		}
 		if(data->end >= data->ppos) {
-			*data = curr;
+			*data = curr;       // Rollback
 			return false;
 		}
 		
