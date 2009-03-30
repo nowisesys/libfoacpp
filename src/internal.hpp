@@ -26,23 +26,47 @@ namespace foa {
 	
 	struct FOA_API_HIDDEN parse_data
 	{
-		char *buffer;    // Scan buffer
-		size_t size;     // Scan buffer size
-		size_t start;    // Scan start position
-		size_t end;      // Scan end position
-		size_t ppos;     // Current put position
-		size_t line;     // Current line
-		bool external;   // Buffer is external
-		int ref;         // Reference count for buffer
+		// 
+		// Shared buffer representation:
+		// 
+		struct buff_rep 
+		{
+			char *buffer;    // Scan buffer
+			size_t size;     // Scan buffer size
+			size_t ppos;     // Current put position
+			bool external;   // Buffer is external
+			int ref;         // Reference count for buffer
+			
+			buff_rep();
+			~buff_rep();
+		} *rep;
+		
+		// 
+		// Non-shared data (for copy semantics):
+		// 
+		struct scan_rep 
+		{
+			size_t start;    // Scan start position
+			size_t end;      // Scan end position
+			size_t line;     // Current scanned line
+			scan_rep();
+		} pos;
 		
 		explicit parse_data();
+		parse_data(const parse_data &data);
 		~parse_data();
 
-		void operator=(parse_data &data);
+		void operator=(const parse_data &data);
 		
 		void reset(bool external);
 		void resize(size_t size);
-		void move_data();		
+		void move_data();
+	private:
+		void clone(const parse_data &data) 
+		{ 
+			rep = data.rep; 
+			pos = data.pos; 
+		}
 	};
 
 	class FOA_API_HIDDEN escape 

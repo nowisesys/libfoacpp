@@ -117,12 +117,12 @@ namespace foa {
 		
 		if(strat->max_size() != memory_strategy::UNLIMITED && 
 		   strat->max_size() != this->strat->max_size() && 
-		   strat->max_size() < data->size) {
+		   strat->max_size() < data->rep->size) {
 			// 
 			// Make sure we don't loose data on resize:
 			// 
-			if(strat->max_size() < data->size - data->ppos) {
-				strat->max_size(data->size - data->ppos);
+			if(strat->max_size() < data->rep->size - data->rep->ppos) {
+				strat->max_size(data->rep->size - data->rep->ppos);
 			}
 			data->move_data();
 			data->resize(strat->max_size());
@@ -136,8 +136,8 @@ namespace foa {
 	void decoder::buffer(const char *buff, size_t size)
 	{
 		data->reset(true);
-		data->buffer = const_cast<char *>(buff);  // use buffer as read-only
-		data->ppos = data->size = size;
+		data->rep->buffer = const_cast<char *>(buff);  // use buffer as read-only
+		data->rep->ppos = data->rep->size = size;
 	}
 	
 	// 
@@ -147,8 +147,8 @@ namespace foa {
 	{
 		this->str = str;
 		data->reset(true);
-		data->buffer = const_cast<char *>(this->str.c_str());  // use buffer as read-only
-		data->ppos = data->size = str.size();
+		data->rep->buffer = const_cast<char *>(this->str.c_str());  // use buffer as read-only
+		data->rep->ppos = data->rep->size = str.size();
 	}
 	
 	// 
@@ -157,7 +157,7 @@ namespace foa {
 	// 
 	const char * decoder::buffer() const 
 	{
-		return data->external ? data->buffer : 0;
+		return data->rep->external ? data->rep->buffer : 0;
 	}
 	
 	// 
@@ -187,7 +187,7 @@ namespace foa {
 	// 
 	const entity * decoder::read()
 	{
-		if(data->external) {
+		if(data->rep->external) {
 			if(!find()) {
 				return 0;
 			}
@@ -197,7 +197,7 @@ namespace foa {
 				// Move data to beginning of buffer, then 
 				// attempt to fill it up again.
 				// 
-				if(data->buffer) {
+				if(data->rep->buffer) {
 					data->move_data();
 				}
 				if(!fill()) { 
@@ -228,9 +228,9 @@ namespace foa {
 	// 
 	void decoder::decode() 
 	{
-		ent.line = data->line;
+		ent.line = data->pos.line;
 		
-		std::string str = std::string(&data->buffer[data->start], data->end - data->start);		
+		std::string str = std::string(&data->rep->buffer[data->pos.start], data->pos.end - data->pos.start);
 		std::string::size_type pos = str.find_first_of('=');
 		
 		if(pos != std::string::npos) {
@@ -271,31 +271,27 @@ namespace foa {
 	// 
 	bool decoder::find()
 	{
-		if(!data->buffer) {
+		if(!data->rep->buffer) {
 			return false;
 		}
-		// 
-		// Calls the (compiler supplied) copy constructor and not, as
-		// one would suspect, the operator=() in the parse_data class.
-		// 
 		parse_data curr = *data;
-		while(data->end < data->ppos && data->buffer[data->end] == '\n') {
-			++data->end;
+		while(data->pos.end < data->rep->ppos && data->rep->buffer[data->pos.end] == '\n') {
+			++data->pos.end;
 		}
-		if(data->end >= data->ppos) {
+		if(data->pos.end >= data->rep->ppos) {
 			*data = curr;       // Rollback
 			return false;
 		}
-		data->start = data->end;
-		while(data->end < data->ppos && data->buffer[data->end] != '\n') {
-			++data->end;
+		data->pos.start = data->pos.end;
+		while(data->pos.end < data->rep->ppos && data->rep->buffer[data->pos.end] != '\n') {
+			++data->pos.end;
 		}
-		if(data->end >= data->ppos) {
+		if(data->pos.end >= data->rep->ppos) {
 			*data = curr;       // Rollback
 			return false;
 		}
 		
-		++data->line;		
+		++data->pos.line;
 		return true;
 	}
 	
@@ -305,23 +301,23 @@ namespace foa {
 	// 
 	bool decoder::fill()
 	{
-		if(!data->buffer) {
-			data->buffer = new char[strat->init_size() + 1];
-			data->size = strat->init_size();
+		if(!data->rep->buffer) {
+			data->rep->buffer = new char[strat->init_size() + 1];
+			data->rep->size = strat->init_size();
 		}
 		while(true) {
-			std::streamsize want = static_cast<std::streamsize>(data->size - data->ppos);
+			std::streamsize want = static_cast<std::streamsize>(data->rep->size - data->rep->ppos);
 			
-			in->read(&data->buffer[data->ppos], want);
+			in->read(&data->rep->buffer[data->rep->ppos], want);
 			if(in->gcount() == 0) {
 				return false;  // End of stream
 			}
-			data->ppos += in->gcount();
+			data->rep->ppos += in->gcount();
 			if(find()) {
 				return true;
 			}
 			if(in->gcount() == want) {
-				size_t size = data->size + strat->step_size();
+				size_t size = data->rep->size + strat->step_size();
 				if(strat->max_size() < size && 
 				   strat->max_size() != memory_strategy::UNLIMITED) {
 					throw std::overflow_error("Maximum buffer size exceeded.");

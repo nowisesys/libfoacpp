@@ -1,6 +1,7 @@
 Version 1.0.2 (2009-mm-dd):
 
-
+	* Added shared representation of input buffer.
+	
 Version 1.0.1 (2009-03-29):
 
 	* Support for building libfoa++ with Visual Studio 2003 added.

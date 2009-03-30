@@ -38,31 +38,62 @@ int isblank(int c)
 namespace foa {
 
 	// 
+	// Constructor for the shared parse buffer.
+	// 
+	parse_data::buff_rep::buff_rep() 
+		: buffer(0), size(0), ppos(0), external(false), ref(0)
+	{
+	}
+	
+	// 
+	// Only delete internal allocated buffer.
+	// 
+	parse_data::buff_rep::~buff_rep()
+	{
+		if(!external) {
+			delete [] buffer;
+		}
+	}
+	
+	parse_data::scan_rep::scan_rep()
+		: start(0), end(0), line(0)
+	{
+	}
+	
+	// 
 	// Construct the parse data object.
 	// 
 	parse_data::parse_data() 
-		: buffer(0), size(0), start(0), end(0), ppos(0), line(0), external(false), ref(0)
 	{
+		rep = new buff_rep;
 	}
 
 	// 
-	// Delete the buffer only when buffer reference count drops below 0.
+	// The copy contructor should share the parse buffer representation.
+	// 
+	parse_data::parse_data(const parse_data &data)
+	{
+		clone(data);
+		rep->ref++;
+	}
+	
+	// 
+	// Delete the buffer only when buffer reference count drops below zero.
 	// 
 	parse_data::~parse_data()
 	{
-		if(!external && ref < 0) {
-			delete [] buffer;
+		if(--rep->ref < 0) {
+			delete rep;
 		}
 	}
 
 	// 
 	// Increment buffer reference count on this object when assigned from
-	// another object.
+	// another object. We should *not* increment the refernce count here!
 	// 
-	void parse_data::operator=(parse_data &data) 
+	void parse_data::operator=(const parse_data &data) 
 	{
-		ref++;
-		data.ref--;
+		clone(data);
 	}
 	
 	// 
@@ -71,11 +102,11 @@ namespace foa {
 	// 
 	void parse_data::reset(bool external)
 	{
-		if(external != this->external) {
-			buffer = 0;
+		if(external != rep->external) {
+			rep->buffer = 0;
 		}
-		this->external = external;
-		line = start = end = ppos = 0;
+		rep->external = external;
+		pos.line = pos.start = pos.end = rep->ppos = 0;
 	}
 	
 	// 
@@ -83,13 +114,13 @@ namespace foa {
 	// 
 	void parse_data::resize(size_t size)
 	{
-		char *buffer = new char[size + 1];
-		if(this->buffer) {
-			memcpy(buffer, this->buffer, this->size);
-			delete [] this->buffer;
+		char *buffer = new char[size];
+		if(rep->buffer) {
+			memcpy(buffer, rep->buffer, rep->size);
+			delete [] rep->buffer;
 		}
-		this->size = size;
-		this->buffer = buffer;
+		rep->size = size;
+		rep->buffer = buffer;
 	}
 	
 	// 
@@ -99,9 +130,10 @@ namespace foa {
 	// 
 	void parse_data::move_data()
 	{
-		size_t length = ppos - end;
-		memmove(buffer + end, buffer, length);
-		ppos = length; start = end = 0;
+		size_t length = rep->ppos - pos.end;
+		memmove(rep->buffer + pos.end, rep->buffer, length);
+		rep->ppos = length - 1;
+		pos.start = pos.end = 0;
 	}
 
 	// 
