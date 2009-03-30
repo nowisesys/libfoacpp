@@ -35,13 +35,13 @@ host_triplet = @host@
 DIST_COMMON = README $(srcdir)/Makefile.am $(srcdir)/Makefile.dep \
 	$(srcdir)/Makefile.in
 noinst_PROGRAMS = decode_file_stream$(EXEEXT) \
-	decode_memory_buffer$(EXEEXT) decode_string_buffer$(EXEEXT) \
-	decode_string_dynamic$(EXEEXT) encode_escape$(EXEEXT) \
-	encode_file_stream1$(EXEEXT) encode_file_stream2$(EXEEXT) \
-	encode_object_array$(EXEEXT) encode_stdout_stream$(EXEEXT) \
-	encode_string_stream$(EXEEXT) encode_write$(EXEEXT) \
-	set_memory_strategy$(EXEEXT) set_option$(EXEEXT) \
-	template$(EXEEXT)
+	decode_memory_buffer$(EXEEXT) decode_realloc$(EXEEXT) \
+	decode_string_buffer$(EXEEXT) decode_string_dynamic$(EXEEXT) \
+	encode_escape$(EXEEXT) encode_file_stream1$(EXEEXT) \
+	encode_file_stream2$(EXEEXT) encode_object_array$(EXEEXT) \
+	encode_stdout_stream$(EXEEXT) encode_string_stream$(EXEEXT) \
+	encode_write$(EXEEXT) set_memory_strategy$(EXEEXT) \
+	set_option$(EXEEXT) template$(EXEEXT)
 subdir = example
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -57,6 +57,9 @@ decode_file_stream_LDADD = $(LDADD)
 am_decode_memory_buffer_OBJECTS = decode_memory_buffer.$(OBJEXT)
 decode_memory_buffer_OBJECTS = $(am_decode_memory_buffer_OBJECTS)
 decode_memory_buffer_LDADD = $(LDADD)
+am_decode_realloc_OBJECTS = decode_realloc.$(OBJEXT)
+decode_realloc_OBJECTS = $(am_decode_realloc_OBJECTS)
+decode_realloc_LDADD = $(LDADD)
 am_decode_string_buffer_OBJECTS = decode_string_buffer.$(OBJEXT)
 decode_string_buffer_OBJECTS = $(am_decode_string_buffer_OBJECTS)
 decode_string_buffer_LDADD = $(LDADD)
@@ -106,7 +109,7 @@ CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(decode_file_stream_SOURCES) \
-	$(decode_memory_buffer_SOURCES) \
+	$(decode_memory_buffer_SOURCES) $(decode_realloc_SOURCES) \
 	$(decode_string_buffer_SOURCES) \
 	$(decode_string_dynamic_SOURCES) $(encode_escape_SOURCES) \
 	$(encode_file_stream1_SOURCES) $(encode_file_stream2_SOURCES) \
@@ -115,7 +118,7 @@ SOURCES = $(decode_file_stream_SOURCES) \
 	$(set_memory_strategy_SOURCES) $(set_option_SOURCES) \
 	$(template_SOURCES)
 DIST_SOURCES = $(decode_file_stream_SOURCES) \
-	$(decode_memory_buffer_SOURCES) \
+	$(decode_memory_buffer_SOURCES) $(decode_realloc_SOURCES) \
 	$(decode_string_buffer_SOURCES) \
 	$(decode_string_dynamic_SOURCES) $(encode_escape_SOURCES) \
 	$(encode_file_stream1_SOURCES) $(encode_file_stream2_SOURCES) \
@@ -241,6 +244,7 @@ INCLUDES = -I$(top_srcdir)/src
 AM_LDFLAGS = $(LIBFOA)
 decode_file_stream_SOURCES = decode_file_stream.cpp
 decode_memory_buffer_SOURCES = decode_memory_buffer.cpp
+decode_realloc_SOURCES = decode_realloc.cpp
 decode_string_buffer_SOURCES = decode_string_buffer.cpp
 decode_string_dynamic_SOURCES = decode_string_dynamic.cpp
 encode_escape_SOURCES = encode_escape.cpp
@@ -299,6 +303,9 @@ decode_file_stream$(EXEEXT): $(decode_file_stream_OBJECTS) $(decode_file_stream_
 decode_memory_buffer$(EXEEXT): $(decode_memory_buffer_OBJECTS) $(decode_memory_buffer_DEPENDENCIES) 
 	@rm -f decode_memory_buffer$(EXEEXT)
 	$(CXXLINK) $(decode_memory_buffer_OBJECTS) $(decode_memory_buffer_LDADD) $(LIBS)
+decode_realloc$(EXEEXT): $(decode_realloc_OBJECTS) $(decode_realloc_DEPENDENCIES) 
+	@rm -f decode_realloc$(EXEEXT)
+	$(CXXLINK) $(decode_realloc_OBJECTS) $(decode_realloc_LDADD) $(LIBS)
 decode_string_buffer$(EXEEXT): $(decode_string_buffer_OBJECTS) $(decode_string_buffer_DEPENDENCIES) 
 	@rm -f decode_string_buffer$(EXEEXT)
 	$(CXXLINK) $(decode_string_buffer_OBJECTS) $(decode_string_buffer_LDADD) $(LIBS)
@@ -344,6 +351,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_file_stream.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_memory_buffer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_realloc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_string_buffer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode_string_dynamic.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/encode_escape.Po@am__quote@
@@ -559,7 +567,7 @@ uninstall-am:
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
-decode_file_stream decode_memory_buffer decode_string_buffer decode_string_dynamic encode_escape encode_file_stream1 encode_file_stream2 encode_object_array encode_stdout_stream encode_string_stream encode_write set_memory_strategy set_option template  : $(LIBFOA)
+decode_file_stream decode_memory_buffer decode_realloc decode_string_buffer decode_string_dynamic encode_escape encode_file_stream1 encode_file_stream2 encode_object_array encode_stdout_stream encode_string_stream encode_write set_memory_strategy set_option template  : $(LIBFOA)
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:
