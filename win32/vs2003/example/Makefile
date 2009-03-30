@@ -29,11 +29,13 @@ EXAMPLES  = decode_file_stream.exe decode_memory_buffer.exe decode_string_buffer
 			decode_string_dynamic.exe encode_escape.exe encode_file_stream1.exe \
 			encode_file_stream2.exe encode_object_array.exe encode_stdout_stream.exe \
 			encode_string_stream.exe encode_write.exe set_memory_strategy.exe \
-			set_option.exe
+			set_option.exe decode_escape.exe decode_large_object.exe decode_realloc.exe
 
 all : $(EXAMPLES)
 
-decode_file_stream.exe : {$(SRCDIR)}decode_file_stream.cpp
+decode_escape.exe : {$(SRCDIR)}decode_escape.cpp
+decode_large_object.exe : {$(SRCDIR)}decode_large_object.cpp
+decode_realloc.exe : {$(SRCDIR)}decode_realloc.cpp
 decode_memory_buffer.exe : {$(SRCDIR)}decode_memory_buffer.cpp
 decode_string_buffer.exe : {$(SRCDIR)}decode_string_buffer.cpp
 decode_string_dynamic.exe : {$(SRCDIR)}decode_string_dynamic.cpp
