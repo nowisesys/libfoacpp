@@ -72,7 +72,7 @@ namespace foa {
 	class FOA_API_HIDDEN escape 
 	{
 	private:
-		static std::string & replace(std::string &str, const char *find, const char *replace);
+		static std::string replace(std::string str, const char *find, const char *replace);
 	public:
 		static std::string & encode(std::string &str);
 		static std::string & decode(std::string &str);

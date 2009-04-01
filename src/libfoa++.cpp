@@ -171,7 +171,7 @@ namespace foa {
 	// 
 	// Replace all occurances of 'find' with 'replace' within the string 'str'.
 	// 
-	std::string & escape::replace(std::string &str, const char *find, const char *replace)
+	std::string escape::replace(std::string str, const char *find, const char *replace)
 	{
 		size_t len = strlen(find);
 		size_t pos = 0;
@@ -188,12 +188,13 @@ namespace foa {
 	// 
 	std::string & escape::encode(std::string &str)
 	{
-		str = replace(str, "(", "%28");
-		str = replace(str, "[", "%5B");
-		str = replace(str, "]", "%29");
-		str = replace(str, ")", "%5D");
-		str = replace(str, "=", "%3D");
-		
+		if(str.find_first_of("([])=") != std::string::npos) {
+			str = replace(str, "(", "%28");
+			str = replace(str, "[", "%5B");
+			str = replace(str, "]", "%5D");
+			str = replace(str, ")", "%29");
+			str = replace(str, "=", "%3D");
+		}
 		return str;
 	}	
 
@@ -202,12 +203,13 @@ namespace foa {
 	// 
 	std::string & escape::decode(std::string &str)
 	{
-		str = replace(str, "%28", "(");
-		str = replace(str, "%5B", "[");
-		str = replace(str, "%29", "]");
-		str = replace(str, "%5D", ")");
-		str = replace(str, "%3D", "=");
-		
+		if(str.find('%') != std::string::npos) {
+			str = replace(str, "%28", "(");
+			str = replace(str, "%5B", "[");
+			str = replace(str, "%29", "]");
+			str = replace(str, "%5D", ")");
+			str = replace(str, "%3D", "=");
+		}
 		return str;
 	}
 }
