@@ -155,7 +155,7 @@ namespace foa {
 		template <typename T> inline std::string convert(T &);
 	};
 
-	struct FOA_API_HIDDEN parse_data;  // Forward declare.
+	struct parse_data;  // Forward declare.
 
 	// 
 	// The FOA decoder:
