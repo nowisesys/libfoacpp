@@ -1,0 +1,10 @@
+[
+person = (
+	name = "Anders Lövgren"
+	country = "Sweden"
+)
+person = (
+	name = "Oddvar Bråh"
+	country = "Norge"
+)
+]
