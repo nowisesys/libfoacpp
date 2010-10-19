@@ -195,39 +195,39 @@ namespace foa {
 		bool fill();         // Fill buffer.
 	};
 
-	template <typename T> std::string encoder::convert(T &val)
+	template <typename T> inline std::string encoder::convert(T &val)
 	{
 		std::stringstream out;
 		std::string str = static_cast<std::stringstream &>((out << val)).str();
 		return str;
 	}
 	
-	void encoder::write(std::string data)
+	inline void encoder::write(std::string data)
 	{
 		write_entity(escaped(data));
 	}
 	
-	void encoder::write(std::string name, std::string data)
+	inline void encoder::write(std::string name, std::string data)
 	{
 		write_entity(name + " = " + escaped(data));
 	}
 	
-	void encoder::write(std::string name, int data)
+	inline void encoder::write(std::string name, int data)
 	{
 		write_entity(name + std::string(" = ") + convert(data));
 	}
 	
-	void encoder::write(std::string name, double data)
+	inline void encoder::write(std::string name, double data)
 	{
 		write_entity(name + std::string(" = ") + convert(data));
 	}
 	
-	void encoder::write(std::string name, spec_chars spec)
+	inline void encoder::write(std::string name, spec_chars spec)
 	{
 		write_entity(name + std::string(" = ") + static_cast<char>(spec));
 	}
 	
-	void encoder::write(spec_chars spec)
+	inline void encoder::write(spec_chars spec)
 	{
 		write_entity(std::string() + static_cast<char>(spec));
 	}
