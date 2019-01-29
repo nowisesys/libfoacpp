@@ -1,10 +1,10 @@
 [
 person = (
-	name = "Anders Lövgren"
+	name = "Anders LÃ¶vgren"
 	country = "Sweden"
 )
 person = (
-	name = "Oddvar Bråh"
+	name = "Oddvar BrÃ¥h"
 	country = "Norge"
 )
 ]

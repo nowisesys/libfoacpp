@@ -1,4 +1,8 @@
-Version 1.0.2 (2009-mm-dd):
+Version 1.0.2 (2019-01-29):
+
+        * Migrated to GIT.
+        
+        * New author, bug report address and homepage URL.
 
 	* Added shared representation of input buffer.
 	

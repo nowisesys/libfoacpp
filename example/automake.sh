@@ -4,7 +4,7 @@
 # included in the automake template. The fragment contains the list of
 # example programs to build.
 #
-# Author: Anders Lövgren
+# Author: Anders LÃ¶vgren
 # Date:   2009-03-27
 
 programs=$(ls *.cpp | sed s%'\.cpp'%''%g | tr '\n' ' ')

@@ -5,7 +5,7 @@ LIBFOA = $(top_srcdir)/src/.libs/libfoa++.a
 ## Dynamic link libfoa++:
 # LIBFOA = $(top_srcdir)/src/libfoa++.la
 
-INCLUDES = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_LDFLAGS  = $(LIBFOA)
 
 ## Include automake dependencies for this makefile template:

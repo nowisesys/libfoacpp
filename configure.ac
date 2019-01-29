@@ -1,9 +1,9 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.63])
-AC_INIT([libfoa++], [1.0.2], [lespaul@algonet.se])
-AM_INIT_AUTOMAKE([libfoa++], [1.0.2])
+AC_PREREQ([2.69])
+AC_INIT([libfoa++], [1.0.2], [andlov@nowise.se])
+AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([config.h.in])
 AC_CONFIG_HEADERS([config.h])
 
@@ -18,7 +18,6 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 AC_PROG_LIBTOOL
-AC_PROG_RANLIB
 
 # Checks for libraries.
 

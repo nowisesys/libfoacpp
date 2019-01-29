@@ -4,9 +4,9 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: libfoa
-Description: C library implementing Fast Object and Array encoding/decoding
-URL: http://www.algonet.se/~lespaul/proj/libfoa
+Description: C++ library implementing Fast Object and Array encoding/decoding
+URL: https://nowise.se/oss/libfoa/spec
 Version: @VERSION@
 Requires: 
-Libs: -L${libdir} -lfoa
+Libs: -L${libdir} -lfoa++
 Cflags:

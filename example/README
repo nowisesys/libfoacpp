@@ -6,4 +6,4 @@ to update the list of examples to build.
 Binaries can be linked to libfoa++ both static and dynamic by uncomment the
 wanted mode (LIBFOA) in the Makefile.am file.
 
-// Anders, 2009-03-27
+// Anders Lövgren, 2009-03-27

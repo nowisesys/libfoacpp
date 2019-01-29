@@ -11,7 +11,7 @@ This is a C++ library implementing the FOA encoding/decoding method.
 ** SPECIFICATION:
 
    This library implements version 1.0 of the FOA specification. The spec 
-   can be found here: http://it.bmc.uu.se/andlov/proj/libfoa/spec.php
+   can be found here: https://nowise.se/oss/libfoa/spec
 
 ** LICENSE:
 
@@ -19,4 +19,4 @@ This is a C++ library implementing the FOA encoding/decoding method.
    Public License, so you are allowed to use it in commercial applications or 
    libraries that links to the library.
    
-// Anders Lövgren, 2009-03-24
+// Anders LÃ¶vgren, 2009-03-24
